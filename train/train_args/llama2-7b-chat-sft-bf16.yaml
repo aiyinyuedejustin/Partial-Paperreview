@@ -1,0 +1,39 @@
+output_dir: ./output/LongQLoRA-Llama2-7b-8k
+model_name_or_path: ./model_download/Llama-2-7b-chat-hf
+train_file: ./paper_review_data_longqlora_10pct.jsonl
+deepspeed: ./train_args/deepspeed/deepspeed_config_s2_bf16.json
+
+sft: true
+# +
+use_flash_attn: true
+
+num_train_epochs: 3
+# max_steps: 1000
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+
+#改
+max_seq_length: 12288
+model_max_length: 12288
+
+learning_rate: 0.0001
+logging_steps: 5
+# save_steps: 100
+save_total_limit: 1
+lr_scheduler_type: constant_with_warmup
+warmup_steps: 30
+
+lora_rank: 64
+lora_alpha: 16
+lora_dropout: 0.05
+
+gradient_checkpointing: true
+disable_tqdm: false
+optim: paged_adamw_32bit
+seed: 42
+bf16: true
+report_to: tensorboard
+dataloader_num_workers: 0
+save_strategy: epoch
+weight_decay: 0
+max_grad_norm: 0.3
